@@ -199,7 +199,7 @@
     .btn-primary svg { flex-shrink: 0; }
 
     .hero-scroll-hint {
-      position: absolute;
+      position: fixed;
       bottom: 36px;
       left: 50%;
       transform: translateX(-50%);
@@ -213,6 +213,13 @@
       text-transform: uppercase;
       color: var(--ink);
       animation: bounce 2.2s ease-in-out infinite;
+      z-index: 50;
+      transition: opacity 0.4s;
+    }
+
+    .hero-scroll-hint.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .hero-scroll-hint::after {
@@ -851,6 +858,15 @@
   </footer>
 
   <script>
+    // Scroll hint — hide after leaving hero
+    const scrollHint = document.querySelector('.hero-scroll-hint');
+    const hero = document.getElementById('hero');
+    const updateScrollHint = () => {
+      const pastHero = window.scrollY > hero.offsetHeight * 0.6;
+      scrollHint.classList.toggle('hidden', pastHero);
+    };
+    window.addEventListener('scroll', updateScrollHint, { passive: true });
+
     // Sticky nav
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
